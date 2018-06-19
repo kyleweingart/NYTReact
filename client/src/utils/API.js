@@ -1,6 +1,21 @@
 import axios from "axios";
 
+
+// TO DO - use axios to create API call to NYT database
+// save results and display
+// import axios from "axios";
+// const BASEURL = "https://www.omdbapi.com/?t=";
+// const APIKEY = "&apikey=trilogy";
+
+// export default {
+//   search: function(query) {
+//     return axios.get(BASEURL + query + APIKEY);
+//   }
+// };
+
+
 export default {
+  
   // Gets all articles
   getArticles: function() {
     return axios.get("/api/articles");
