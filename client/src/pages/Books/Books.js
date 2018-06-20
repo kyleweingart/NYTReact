@@ -8,16 +8,24 @@ import { List, ListItem } from "../../components/List";
 import { Input, TextArea, FormBtn } from "../../components/Form";
 
 class Articles extends Component {
+  
   state = {
-    articles: [],
+    result: {},
+    search: "",
+    articles: {},
     startyear: "",
     endyear: "",
     
   };
 
+  // componentDidMount() {
+  //   this.loadSavedArticles();
+  // }
   componentDidMount() {
-    this.loadSavedArticles();
+    this.searchArticles("World Cup");
   }
+
+
 
   loadSavedArticles = () => {
     API.getArticles()
@@ -27,11 +35,19 @@ class Articles extends Component {
       .catch(err => console.log(err));
   };
 
-  deleteBook = id => {
-    API.deleteBook(id)
-      .then(res => this.loadBooks())
-      .catch(err => console.log(err));
-  };
+  searchArticles = query => {
+    console.log("worked");
+    API.search(query)
+    .then(res => this.setState({ result: res.data}))
+    .catch(err => console.log(err));
+    console.log(this.state.result);
+  }
+
+  // deleteBook = id => {
+  //   API.deleteBook(id)
+  //     .then(res => this.loadBooks())
+  //     .catch(err => console.log(err));
+  // };
 
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -42,16 +58,22 @@ class Articles extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    if (this.state.title && this.state.author) {
-      API.saveBook({
-        title: this.state.title,
-        author: this.state.author,
-        synopsis: this.state.synopsis
-      })
-        .then(res => this.loadBooks())
-        .catch(err => console.log(err));
-    }
+    this.searchArticles(this.state.search);
   };
+
+
+  // handleFormSubmit = event => {
+  //   event.preventDefault();
+  //   if (this.state.search) {
+  //     API.search({
+  //       title: this.state.title,
+  //       author: this.state.author,
+  //       synopsis: this.state.synopsis
+  //     })
+  //       .then(res => this.loadBooks())
+  //       .catch(err => console.log(err));
+  //   }
+  // };
 
   render() {
     return (
@@ -63,28 +85,28 @@ class Articles extends Component {
             </Jumbotron>
             <form>
               <Input
-                value={this.state.title}
+                value={this.state.search}
                 onChange={this.handleInputChange}
-                name="topic"
+                name="search"
                 placeholder="Topic (required)"
               />
               <Input
-                value={this.state.author}
+                value={this.state.startyear}
                 onChange={this.handleInputChange}
                 name="startyear"
-                placeholder="Start Year (required)"
+                placeholder="Start Year (Optional)"
               />
               <Input
-                value={this.state.synopsis}
+                value={this.state.endyear}
                 onChange={this.handleInputChange}
                 name="endyear"
                 placeholder="End Year (Optional)"
               />
               <FormBtn
-                disabled={!(this.state.author && this.state.title)}
+                disabled={!(this.state.search)}
                 onClick={this.handleFormSubmit}
               >
-                Submit Book
+                Search
               </FormBtn>
             </form>
           </Col>
@@ -101,7 +123,7 @@ class Articles extends Component {
                         {article.title} 
                       </strong>
                     </Link>
-                    <DeleteBtn onClick={() => this.deleteBook(article._id)} />
+                    <DeleteBtn onClick={() => this.deleteArticle(article._id)} />
                   </ListItem>
                 ))}
               </List>

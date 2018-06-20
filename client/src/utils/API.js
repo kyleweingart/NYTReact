@@ -3,18 +3,26 @@ import axios from "axios";
 
 // TO DO - use axios to create API call to NYT database
 // save results and display
-// import axios from "axios";
-// const BASEURL = "https://www.omdbapi.com/?t=";
-// const APIKEY = "&apikey=trilogy";
 
-// export default {
-//   search: function(query) {
-//     return axios.get(BASEURL + query + APIKEY);
-//   }
-// };
+const BASEURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+const APIKEY = "?api-key=b9f91d369ff59547cd47b931d8cbc56b:0:74623931&q=";
+
+
+
+// jQuery way
+// var searchTerm = $("#search-term").val().trim();
+// queryURL += "&q=" + searchTerm;
+
 
 
 export default {
+
+  // Get request to NYT API
+  search: function(query) {
+    return axios.get(BASEURL + APIKEY + query);
+    // console.log("working");
+  },
+  
   
   // Gets all articles
   getArticles: function() {
