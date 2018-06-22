@@ -10,8 +10,27 @@ import { Container, Row, Col } from "./components/Grid";
 class App extends Component {
   state = {
     articles: [],
-    articleSearch: ""
+    articleSearch: "",
+    savedArticles: []
   };
+
+  // componentDidMount() {
+  //   this.loadArticles();
+  // }
+
+  loadArticles = () => {
+    API.getSavedArticles()
+      .then(res => this.setState({ savedArticles: res.data }))
+      .catch(err => console.log(err));
+  };
+
+  saveArticle = id => {
+    API.saveArticle(id)
+      .then(res => this.loadArticles())
+      .catch(err => console.log(err));
+  };
+
+ 
 
   handleInputChange = event => {
     // Destructure the name and value properties off of event.target
@@ -63,7 +82,7 @@ class App extends Component {
               </form>
             </Col>
           </Row>
-          <Row style={{marginTop:30}}>
+          <Row>
             <Col size="xs-12">
               {!this.state.articles.length ? (
                 <h1 className="text-center">No Articles to Display</h1>
@@ -73,14 +92,16 @@ class App extends Component {
                     return (
                       <RecipeListItem
                         key={article._id}
+                        id={article._id}
                         title={article.headline.main}
                         href={article.web_url}
                         byline={article.byline.original}
-                        
-                        
-                      />
+                        />
+                      
                     );
+                  
                   })}
+                  
                 </RecipeList>
               )}
             </Col>

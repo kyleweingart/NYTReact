@@ -9,6 +9,20 @@ router.get("/articles", (req, res) => {
     .catch(err => res.status(422).json(err));
 });
 
+// Matches with "/api/articles"
+router.route("/")
+  .get(articlesController.findAll)
+  .post(articlesController.create);
+
+// Matches with "/api/savedarticles/:id"
+router
+  .route("/:id")
+  .put(articlesController.update)
+  .delete(articlesController.remove);
+
+module.exports = router;
+
+
 module.exports = router;
 
 
